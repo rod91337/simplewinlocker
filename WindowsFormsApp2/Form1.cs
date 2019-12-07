@@ -144,7 +144,7 @@ namespace WindowsFormsApp2
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            Process[] procs = Process.GetProcessesByName("explorer"         );
+            Process[] procs = Process.GetProcessesByName("explorer");
             foreach (Process p in procs)
             {
                 p.Kill();
